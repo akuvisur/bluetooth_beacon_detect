@@ -42,8 +42,8 @@ public class ContextCard implements IContextCard {
                 if (intent.getAction().equals(Plugin.BROADCAST_ACTION)) {
                     Log.d(TAG, "broadcast received");
                     if (intent.getDoubleExtra("Distance",99.0) < 1) {
-                        distance = intent.getDoubleExtra(Provider.All_Data.DISTANCE,99.0);
-                        address = intent.getStringExtra(Provider.All_Data.MAC_ADDRESS);
+                        distance = intent.getDoubleExtra(Provider.BluetoothBeacon_Data.DOUBLE_DISTANCE,99.0);
+                        address = intent.getStringExtra(Provider.BluetoothBeacon_Data.MAC_ADDRESS);
                         updateUI();
                     }
                 }

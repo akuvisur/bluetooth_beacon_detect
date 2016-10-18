@@ -1,7 +1,6 @@
 package com.aware.plugin.bluetooth_beacon_detect;
 
 import android.Manifest;
-import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -58,7 +57,7 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
         //To sync data to the server, you'll need to set this variables from your ContentProvider
         DATABASE_TABLES = Provider.DATABASE_TABLES;
         TABLES_FIELDS = Provider.TABLES_FIELDS;
-        CONTEXT_URIS = new Uri[]{ Provider.All_Data.CONTENT_URI }; //this syncs dummy All_Data to server
+        CONTEXT_URIS = new Uri[]{ Provider.BluetoothBeacon_Data.CONTENT_URI }; //this syncs dummy BluetoothBeacon_Data to server
 
         //Activate plugin -- do this ALWAYS as the last thing (this will restart your own plugin and apply the settings)
         Aware.startPlugin(this, "com.aware.plugin.bluetooth_beacon_detect");
@@ -121,27 +120,27 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
                     for (Beacon b : beacons) {
                         broadcastIntent = new Intent();
                         broadcastIntent.setAction(BROADCAST_ACTION);
-                        broadcastIntent.putExtra(Provider.All_Data.MAC_ADDRESS, b.getBluetoothAddress());
-                        broadcastIntent.putExtra(Provider.All_Data.NAME, b.getBluetoothName());
-                        broadcastIntent.putExtra(Provider.All_Data.ID1, b.getId1().toString());
-                        broadcastIntent.putExtra(Provider.All_Data.ID2, b.getId2().toString());
-                        broadcastIntent.putExtra(Provider.All_Data.ID3, b.getId3().toString());
-                        broadcastIntent.putExtra(Provider.All_Data.DISTANCE, b.getDistance());
-                        broadcastIntent.putExtra(Provider.All_Data.NEAR, b.getDistance() < 1);
-                        broadcastIntent.putExtra(Provider.All_Data.RSSI, b.getRssi());
+                        broadcastIntent.putExtra(Provider.BluetoothBeacon_Data.MAC_ADDRESS, b.getBluetoothAddress());
+                        broadcastIntent.putExtra(Provider.BluetoothBeacon_Data.NAME, b.getBluetoothName());
+                        broadcastIntent.putExtra(Provider.BluetoothBeacon_Data.ID1, b.getId1().toString());
+                        broadcastIntent.putExtra(Provider.BluetoothBeacon_Data.ID2, b.getId2().toString());
+                        broadcastIntent.putExtra(Provider.BluetoothBeacon_Data.ID3, b.getId3().toString());
+                        broadcastIntent.putExtra(Provider.BluetoothBeacon_Data.DOUBLE_DISTANCE, b.getDistance());
+                        broadcastIntent.putExtra(Provider.BluetoothBeacon_Data.NEAR, b.getDistance() < 1);
+                        broadcastIntent.putExtra(Provider.BluetoothBeacon_Data.DOUBLE_RSSI, b.getRssi());
                         sendBroadcast(broadcastIntent);
 
                         ContentValues cv = new ContentValues();
-                        cv.put(Provider.All_Data.TIMESTAMP, System.currentTimeMillis());
-                        cv.put(Provider.All_Data.DEVICE_ID, DEVICE_ID);
-                        cv.put(Provider.All_Data.MAC_ADDRESS, b.getBluetoothAddress());
-                        cv.put(Provider.All_Data.NAME, b.getBluetoothName());
-                        cv.put(Provider.All_Data.ID1, b.getId1().toString());
-                        cv.put(Provider.All_Data.ID2, b.getId2().toString());
-                        cv.put(Provider.All_Data.ID3, b.getId3().toString());
-                        cv.put(Provider.All_Data.DISTANCE, b.getDistance());
-                        cv.put(Provider.All_Data.NEAR, b.getDistance() < 1);
-                        cv.put(Provider.All_Data.RSSI, b.getRssi());
+                        cv.put(Provider.BluetoothBeacon_Data.TIMESTAMP, System.currentTimeMillis());
+                        cv.put(Provider.BluetoothBeacon_Data.DEVICE_ID, DEVICE_ID);
+                        cv.put(Provider.BluetoothBeacon_Data.MAC_ADDRESS, b.getBluetoothAddress());
+                        cv.put(Provider.BluetoothBeacon_Data.NAME, b.getBluetoothName());
+                        cv.put(Provider.BluetoothBeacon_Data.ID1, b.getId1().toString());
+                        cv.put(Provider.BluetoothBeacon_Data.ID2, b.getId2().toString());
+                        cv.put(Provider.BluetoothBeacon_Data.ID3, b.getId3().toString());
+                        cv.put(Provider.BluetoothBeacon_Data.DOUBLE_DISTANCE, b.getDistance());
+                        cv.put(Provider.BluetoothBeacon_Data.NEAR, b.getDistance() < 1);
+                        cv.put(Provider.BluetoothBeacon_Data.DOUBLE_RSSI, b.getRssi());
 
                         Log.i(TAG, "inserting");
                         getContentResolver().insert(Provider.CONTENT_URI, cv);

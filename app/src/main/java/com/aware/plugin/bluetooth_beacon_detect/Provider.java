@@ -21,14 +21,14 @@ import java.util.HashMap;
 
 public class Provider extends ContentProvider {
 
-    public static String AUTHORITY = "com.aware.plugin.bluetooth_beacon_detect.provider.all_beacons"; //change to package.provider.your_plugin_name
-    public static final int DATABASE_VERSION = 2; //increase this if you make changes to the database structure, i.e., rename columns, etc.
+    public static String AUTHORITY = "com.aware.plugin.bluetooth_beacon_detect.provider.bt_beacons"; //change to package.provider.your_plugin_name
+    public static final int DATABASE_VERSION = 3; //increase this if you make changes to the database structure, i.e., rename columns, etc.
 
     public static Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
     public static final String DATABASE_NAME = "plugin_bluetooth_beacon_detect.db"; //the database filename, use plugin_xxx for plugins.
 
     //Add here your database table names, as many as you need
-    public static final String DB_TBL_ALL_BEACONS = "all_beacons";
+    public static final String DB_TBL_BT_BEACONS = "bt_beacons";
 
     //For each table, add two indexes: DIR and ITEM. The index needs to always increment. Next one is 3, and so on.
     private static final int TABLE_ONE_DIR = 1;
@@ -36,7 +36,7 @@ public class Provider extends ContentProvider {
 
     //Put tables names in this array so AWARE knows what you have on the database
     public static final String[] DATABASE_TABLES = {
-            DB_TBL_ALL_BEACONS
+            DB_TBL_BT_BEACONS
     };
 
     //These are columns that we need to sync data, don't change this!
@@ -50,10 +50,10 @@ public class Provider extends ContentProvider {
      * Create one of these per database table
      * In this example, we are adding example columns
      */
-    public static final class All_Data implements AWAREColumns {
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(Provider.CONTENT_URI, DB_TBL_ALL_BEACONS);
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.aware.plugin.bluetooth_beacon_detect.all_beacons"; //modify me
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.aware.plugin.bluetooth_beacon_detect.all_beacons"; //modify me
+    public static final class BluetoothBeacon_Data implements AWAREColumns {
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(Provider.CONTENT_URI, DB_TBL_BT_BEACONS);
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.aware.plugin.bluetooth_beacon_detect.bt_beacons"; //modify me
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.aware.plugin.bluetooth_beacon_detect.bt_beacons"; //modify me
 
         //Note: integers and strings don't need a type prefix_
         public static final String MAC_ADDRESS = "mac_address";
@@ -61,25 +61,27 @@ public class Provider extends ContentProvider {
         public static final String ID1 = "id1";
         public static final String ID2 = "id2";
         public static final String ID3 = "id3";
-        public static final String DISTANCE = "distance";
+        public static final String DOUBLE_DISTANCE = "distance";
         public static final String NEAR = "near";
-        public static final String RSSI = "rssi";
+        public static final String DOUBLE_RSSI = "rssi";
+        public static final String LABEL = "label";
 
     }
 
     //Define each database table fields
     private static final String DB_TBL_ALL_FIELDS =
-        All_Data._ID + " integer primary key autoincrement," +
-        All_Data.TIMESTAMP + " real default 0," +
-        All_Data.DEVICE_ID + " text default ''," +
-        All_Data.MAC_ADDRESS + " text default ''," +
-        All_Data.NAME + " text default ''," +
-        All_Data.ID1 + " text default ''," +
-        All_Data.ID2 + " text default ''," +
-        All_Data.ID3 + " text default ''," +
-        All_Data.DISTANCE + " real default ''," +
-        All_Data.NEAR + " boolean default ''," +
-        All_Data.RSSI + " real default ''";
+        BluetoothBeacon_Data._ID + " integer primary key autoincrement," +
+        BluetoothBeacon_Data.TIMESTAMP + " real default 0," +
+        BluetoothBeacon_Data.DEVICE_ID + " text default ''," +
+        BluetoothBeacon_Data.MAC_ADDRESS + " text default ''," +
+        BluetoothBeacon_Data.NAME + " text default ''," +
+        BluetoothBeacon_Data.ID1 + " text default ''," +
+        BluetoothBeacon_Data.ID2 + " text default ''," +
+        BluetoothBeacon_Data.ID3 + " text default ''," +
+        BluetoothBeacon_Data.DOUBLE_DISTANCE + " real default 0," +
+        BluetoothBeacon_Data.NEAR + " boolean default FALSE," +
+        BluetoothBeacon_Data.DOUBLE_RSSI + " real default 0," +
+        BluetoothBeacon_Data.LABEL + " text default ''";
 
     /**
      * Share the fields with AWARE so we can replicate the table schema on the server
@@ -113,7 +115,7 @@ public class Provider extends ContentProvider {
     @Override
     public boolean onCreate() {
         //This is a hack to allow providers to be reusable in any application/plugin by making the authority dynamic using the package name of the parent app
-        AUTHORITY = getContext().getPackageName() + ".provider.all_beacons"; //make sure xxx matches the first string in this class
+        AUTHORITY = getContext().getPackageName() + ".provider.bt_beacons"; //make sure xxx matches the first string in this class
 
         sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -123,18 +125,18 @@ public class Provider extends ContentProvider {
 
         //Create each table hashmap so Android knows how to insert data to the database. Put ALL table fields.
         tableOneHash = new HashMap<>();
-        tableOneHash.put(All_Data._ID, All_Data._ID);
-        tableOneHash.put(All_Data.TIMESTAMP, All_Data.TIMESTAMP);
-        tableOneHash.put(All_Data.DEVICE_ID, All_Data.DEVICE_ID);
-        tableOneHash.put(All_Data.MAC_ADDRESS, All_Data.MAC_ADDRESS);
-        tableOneHash.put(All_Data.NAME, All_Data.NAME);
-        tableOneHash.put(All_Data.ID1, All_Data.ID1);
-        tableOneHash.put(All_Data.ID2, All_Data.ID2);
-        tableOneHash.put(All_Data.ID3, All_Data.ID3);
-        tableOneHash.put(All_Data.DISTANCE, All_Data.DISTANCE);
-        tableOneHash.put(All_Data.NEAR, All_Data.NEAR);
-        tableOneHash.put(All_Data.RSSI, All_Data.RSSI);
-
+        tableOneHash.put(BluetoothBeacon_Data._ID, BluetoothBeacon_Data._ID);
+        tableOneHash.put(BluetoothBeacon_Data.TIMESTAMP, BluetoothBeacon_Data.TIMESTAMP);
+        tableOneHash.put(BluetoothBeacon_Data.DEVICE_ID, BluetoothBeacon_Data.DEVICE_ID);
+        tableOneHash.put(BluetoothBeacon_Data.MAC_ADDRESS, BluetoothBeacon_Data.MAC_ADDRESS);
+        tableOneHash.put(BluetoothBeacon_Data.NAME, BluetoothBeacon_Data.NAME);
+        tableOneHash.put(BluetoothBeacon_Data.ID1, BluetoothBeacon_Data.ID1);
+        tableOneHash.put(BluetoothBeacon_Data.ID2, BluetoothBeacon_Data.ID2);
+        tableOneHash.put(BluetoothBeacon_Data.ID3, BluetoothBeacon_Data.ID3);
+        tableOneHash.put(BluetoothBeacon_Data.DOUBLE_DISTANCE, BluetoothBeacon_Data.DOUBLE_DISTANCE);
+        tableOneHash.put(BluetoothBeacon_Data.NEAR, BluetoothBeacon_Data.NEAR);
+        tableOneHash.put(BluetoothBeacon_Data.DOUBLE_RSSI, BluetoothBeacon_Data.DOUBLE_RSSI);
+        tableOneHash.put(BluetoothBeacon_Data.LABEL, BluetoothBeacon_Data.LABEL);
         return true;
     }
 
@@ -179,9 +181,9 @@ public class Provider extends ContentProvider {
 
             //Add each table indexes DIR and ITEM
             case TABLE_ONE_DIR:
-                return All_Data.CONTENT_TYPE;
+                return BluetoothBeacon_Data.CONTENT_TYPE;
             case TABLE_ONE_ITEM:
-                return All_Data.CONTENT_ITEM_TYPE;
+                return BluetoothBeacon_Data.CONTENT_ITEM_TYPE;
 
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -203,9 +205,9 @@ public class Provider extends ContentProvider {
 
             //Add each table DIR case
             case TABLE_ONE_DIR:
-                _id = database.insert(DATABASE_TABLES[0], All_Data.DEVICE_ID, values);
+                _id = database.insert(DATABASE_TABLES[0], BluetoothBeacon_Data.DEVICE_ID, values);
                 if (_id > 0) {
-                    Uri dataUri = ContentUris.withAppendedId(All_Data.CONTENT_URI, _id);
+                    Uri dataUri = ContentUris.withAppendedId(BluetoothBeacon_Data.CONTENT_URI, _id);
                     getContext().getContentResolver().notifyChange(dataUri, null);
                     return dataUri;
                 }
