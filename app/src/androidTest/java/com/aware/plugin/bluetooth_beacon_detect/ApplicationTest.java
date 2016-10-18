@@ -1,4 +1,4 @@
-package com.aware.plugin.template;
+package com.aware.plugin.bluetooth_beacon_detect;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

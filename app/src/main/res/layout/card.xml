@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Counter: "
-        android:id="@+id/counter"
-        android:textColor="#000"/>
-</LinearLayout>
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="address"
+        android:id="@+id/address"
+        android:textColor="#000000"
+        android:layout_gravity="end"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:paddingStart="8dp"
+        android:paddingEnd="4dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="distance m"
+        android:textColor="#000000"
+        android:id="@+id/distance"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:paddingStart="4dp"
+        android:paddingEnd="8dp"/>
+
+</RelativeLayout>

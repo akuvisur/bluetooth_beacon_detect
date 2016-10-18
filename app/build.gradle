@@ -9,8 +9,8 @@ android {
     buildToolsVersion "24.0.1"
 
     defaultConfig {
-        applicationId "com.aware.plugin.template" //EDIT ME
-        minSdkVersion 10
+        applicationId "com.aware.plugin.bluetooth_beacon_detect" //EDIT ME
+        minSdkVersion 23
         targetSdkVersion 24
         versionCode version_code
         versionName version_readable
@@ -37,6 +37,10 @@ android {
     lintOptions {
         abortOnError false
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
 }
 
 bintray {
@@ -51,14 +55,14 @@ bintray {
         repo = 'com.awareframework'
         name = android.defaultConfig.applicationId
         licenses = ['Apache-2.0']
-        websiteUrl = 'https://github.com/denzilferreira/aware-plugin-template' //EDIT ME
-        issueTrackerUrl = 'https://github.com/denzilferreira/aware-plugin-template/issues' //EDIT ME
+        websiteUrl = 'https://github.com/akuvisur/bluetooth-beacon' //EDIT ME
+        issueTrackerUrl = 'https://github.com/akuvisur/bluetooth-beacon/issues' //EDIT ME
         labels = ['aar','android','framework','aware']
         publicDownloadNumbers = true
-        vcsUrl = 'https://github.com/denzilferreira/aware-plugin-template.git' //EDIT ME
-        desc = "AWARE Plugin: Template" //EDIT ME
+        vcsUrl = 'https://github.com/akuvisur/bluetooth-beacon.git' //EDIT ME
+        desc = "AWARE Plugin: Bluetooth Beacon" //EDIT ME
         userOrg = user
-        githubRepo = "denzilferreira/aware-plugin-template" //EDIT ME
+        githubRepo = "akuvisur/bluetooth-beacon" //EDIT ME
 
         version {
             name = "$version_readable"
@@ -70,9 +74,7 @@ bintray {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.android.support:appcompat-v7:${support_libs}"
-    compile "com.awareframework:aware-core:${aware_libs}@aar"
-    compile "com.koushikdutta.ion:ion:2.1.6"
-    compile "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2"
+    compile 'com.awareframework:aware-core:4.0.641'
+    compile 'org.altbeacon:android-beacon-library:2.9.1'
+    compile 'com.android.support:appcompat-v7:24.0.1'
 }
