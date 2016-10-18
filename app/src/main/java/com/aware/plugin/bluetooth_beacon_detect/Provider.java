@@ -19,16 +19,13 @@ import com.aware.utils.DatabaseHelper;
 
 import java.util.HashMap;
 
-/**
- * Created by denzil on 07/04/16.
- */
 public class Provider extends ContentProvider {
 
-    public static String AUTHORITY = "com.aware.plugin.template.provider.bluetooth_beacon_detect"; //change to package.provider.your_plugin_name
-    public static final int DATABASE_VERSION = 1; //increase this if you make changes to the database structure, i.e., rename columns, etc.
+    public static String AUTHORITY = "com.aware.plugin.bluetooth_beacon_detect.provider.all_beacons"; //change to package.provider.your_plugin_name
+    public static final int DATABASE_VERSION = 2; //increase this if you make changes to the database structure, i.e., rename columns, etc.
 
     public static Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
-    public static final String DATABASE_NAME = "plugin_bb_beacon_detect.db"; //the database filename, use plugin_xxx for plugins.
+    public static final String DATABASE_NAME = "plugin_bluetooth_beacon_detect.db"; //the database filename, use plugin_xxx for plugins.
 
     //Add here your database table names, as many as you need
     public static final String DB_TBL_ALL_BEACONS = "all_beacons";
@@ -55,8 +52,8 @@ public class Provider extends ContentProvider {
      */
     public static final class All_Data implements AWAREColumns {
         public static final Uri CONTENT_URI = Uri.withAppendedPath(Provider.CONTENT_URI, DB_TBL_ALL_BEACONS);
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.aware.plugin.template.bluetooth_beacon_detect.all_beacons"; //modify me
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.aware.plugin.template.bluetooth_beacon_detect.all_beacons"; //modify me
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.aware.plugin.bluetooth_beacon_detect.all_beacons"; //modify me
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.aware.plugin.bluetooth_beacon_detect.all_beacons"; //modify me
 
         //Note: integers and strings don't need a type prefix_
         public static final String MAC_ADDRESS = "mac_address";
@@ -82,8 +79,7 @@ public class Provider extends ContentProvider {
         All_Data.ID3 + " text default ''," +
         All_Data.DISTANCE + " real default ''," +
         All_Data.NEAR + " boolean default ''," +
-        All_Data.RSSI + " real default '',";
-
+        All_Data.RSSI + " real default ''";
 
     /**
      * Share the fields with AWARE so we can replicate the table schema on the server
@@ -117,7 +113,7 @@ public class Provider extends ContentProvider {
     @Override
     public boolean onCreate() {
         //This is a hack to allow providers to be reusable in any application/plugin by making the authority dynamic using the package name of the parent app
-        AUTHORITY = getContext().getPackageName() + ".provider.bluetooth_beacon_detect"; //make sure xxx matches the first string in this class
+        AUTHORITY = getContext().getPackageName() + ".provider.all_beacons"; //make sure xxx matches the first string in this class
 
         sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 

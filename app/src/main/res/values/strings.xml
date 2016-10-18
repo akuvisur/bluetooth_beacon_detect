@@ -1,4 +1,3 @@
 <resources>
-    <string name="app_name">AWARE: Plugin Template</string>
-    <string name="title_activity_main">MonitorActivity</string>
+    <string name="app_name">AWARE: Bluetooth Beacon Detect</string>
 </resources>

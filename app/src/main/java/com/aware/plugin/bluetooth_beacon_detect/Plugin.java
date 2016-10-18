@@ -108,9 +108,11 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
 
     Intent broadcastIntent;
     public static final String BROADCAST_ACTION = "com.aware.plugin.bluetooth_beacon_detect";
+    public static String DEVICE_ID;
     @Override
     public void onBeaconServiceConnect() {
         //Log.d(TAG, "plop");
+        DEVICE_ID = Aware.getSetting(this, Aware_Preferences.DEVICE_ID);
         beaconManager.addRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
@@ -130,6 +132,8 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
                         sendBroadcast(broadcastIntent);
 
                         ContentValues cv = new ContentValues();
+                        cv.put(Provider.All_Data.TIMESTAMP, System.currentTimeMillis());
+                        cv.put(Provider.All_Data.DEVICE_ID, DEVICE_ID);
                         cv.put(Provider.All_Data.MAC_ADDRESS, b.getBluetoothAddress());
                         cv.put(Provider.All_Data.NAME, b.getBluetoothName());
                         cv.put(Provider.All_Data.ID1, b.getId1().toString());
@@ -140,8 +144,7 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
                         cv.put(Provider.All_Data.RSSI, b.getRssi());
 
                         Log.i(TAG, "inserting");
-                        Provider p = new Provider();
-                        p.insert(Provider.CONTENT_URI, cv);
+                        getContentResolver().insert(Provider.CONTENT_URI, cv);
                     }
                 }
             }

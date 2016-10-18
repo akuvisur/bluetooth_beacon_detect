@@ -55,14 +55,14 @@ bintray {
         repo = 'com.awareframework'
         name = android.defaultConfig.applicationId
         licenses = ['Apache-2.0']
-        websiteUrl = 'https://github.com/akuvisur/bluetooth-beacon' //EDIT ME
-        issueTrackerUrl = 'https://github.com/akuvisur/bluetooth-beacon/issues' //EDIT ME
+        websiteUrl = 'https://github.com/akuvisur/bluetooth_beacon_detect' //EDIT ME
+        issueTrackerUrl = 'https://github.com/akuvisur/bluetooth_beacon_detect/issues' //EDIT ME
         labels = ['aar','android','framework','aware']
         publicDownloadNumbers = true
-        vcsUrl = 'https://github.com/akuvisur/bluetooth-beacon.git' //EDIT ME
-        desc = "AWARE Plugin: Bluetooth Beacon" //EDIT ME
+        vcsUrl = 'https://github.com/akuvisur/bluetooth_beacon_detect.git' //EDIT ME
+        desc = "AWARE Plugin: Bluetooth Beacon Detect" //EDIT ME
         userOrg = user
-        githubRepo = "akuvisur/bluetooth-beacon" //EDIT ME
+        githubRepo = "akuvisur/bluetooth_beacon_detect" //EDIT ME
 
         version {
             name = "$version_readable"

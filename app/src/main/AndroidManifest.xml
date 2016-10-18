@@ -15,7 +15,7 @@
 
         <provider
             android:name="com.aware.plugin.bluetooth_beacon_detect.Provider"
-            android:authorities="${applicationId}.provider.xxx"
+            android:authorities="${applicationId}.provider.all_beacons"
             android:exported="true"
             android:readPermission="com.aware.READ_CONTEXT_DATA"
             android:writePermission="com.aware.WRITE_CONTEXT_DATA" />
