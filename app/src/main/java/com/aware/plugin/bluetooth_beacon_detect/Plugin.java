@@ -61,10 +61,10 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
 
         // To detect proprietary beacons, you must add a line like below corresponding to your beacon
         // type.  Do a web search for "setBeaconLayout" to get the proper expression.
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
+        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(Aware.getSetting(this, Settings.TYPE_PLUGIN_BLUETOOTH_BEACON_DETECT)));
 
-        beaconManager.setForegroundScanPeriod(10000L);
-        beaconManager.setBackgroundScanPeriod(10000L);
+        beaconManager.setForegroundScanPeriod(Long.valueOf(Aware.getSetting(this, Settings.FREQUENCY_PLUGIN_BLUETOOTH_BEACON_DETECT)));
+        beaconManager.setBackgroundScanPeriod(Long.valueOf(Aware.getSetting(this, Settings.FREQUENCY_PLUGIN_BLUETOOTH_BEACON_DETECT)));
 
         beaconManager.bind(this);
 
@@ -136,9 +136,12 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
     public static final String BROADCAST_ACTION_NEAREST = "com.aware.plugin.bluetooth_beacon_detect.nearest_beacon";
 
     public static String DEVICE_ID;
+    public static String LABEL;
     @Override
     public void onBeaconServiceConnect() {
         DEVICE_ID = Aware.getSetting(this, Aware_Preferences.DEVICE_ID);
+        LABEL = Aware.getSetting(this, Settings.LABEL_PLUGIN_BLUETOOTH_BEACON_DETECT);
+
         beaconManager.addRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
@@ -164,7 +167,7 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
                         broadcastIntentAll.putExtra(Provider.BluetoothBeacon_Data.NEAR, b.getDistance() < 1);
                         broadcastIntentAll.putExtra(Provider.BluetoothBeacon_Data.DOUBLE_RSSI, b.getRssi());
                         broadcastIntentAll.putExtra(Provider.BluetoothBeacon_Data.NUM_BEACONS, Integer.valueOf(beacons.size()));
-                        broadcastIntentAll.putExtra(Provider.BluetoothBeacon_Data.LABEL, "");
+                        broadcastIntentAll.putExtra(Provider.BluetoothBeacon_Data.LABEL, LABEL);
                         sendBroadcast(broadcastIntentAll);
 
                         ContentValues cv = new ContentValues();
@@ -179,7 +182,7 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
                         cv.put(Provider.BluetoothBeacon_Data.NEAR, b.getDistance() < 1);
                         cv.put(Provider.BluetoothBeacon_Data.DOUBLE_RSSI, b.getRssi());
                         cv.put(Provider.BluetoothBeacon_Data.NUM_BEACONS, Integer.valueOf(beacons.size()));
-                        cv.put(Provider.BluetoothBeacon_Data.LABEL, "");
+                        cv.put(Provider.BluetoothBeacon_Data.LABEL, LABEL);
                         getContentResolver().insert(Provider.BluetoothBeacon_Data.CONTENT_URI, cv);
                     }
                     // store and broadcast nearest beacon information
@@ -195,7 +198,7 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
                         broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.NEAR, nearest_beacon.getDistance() < 1);
                         broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.DOUBLE_RSSI, nearest_beacon.getRssi());
                         broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.NUM_BEACONS, beacons.size());
-                        broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.LABEL, "");
+                        broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.LABEL, LABEL);
                         sendBroadcast(broadcastIntentNearest);
 
                         ContentValues cv = new ContentValues();
@@ -210,7 +213,7 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
                         cv.put(Provider.BluetoothBeacon_Data.NEAR, nearest_beacon.getDistance() < 1);
                         cv.put(Provider.BluetoothBeacon_Data.DOUBLE_RSSI, nearest_beacon.getRssi());
                         cv.put(Provider.BluetoothBeacon_Data.NUM_BEACONS, beacons.size());
-                        cv.put(Provider.BluetoothBeacon_Data.LABEL, "");
+                        cv.put(Provider.BluetoothBeacon_Data.LABEL, LABEL);
                         getContentResolver().insert(Provider.NearestBeacon_Data.CONTENT_URI, cv);
                     }
                 }
@@ -223,16 +226,21 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
     }
 
     public void changeParams() {
-        beaconManager.unbind(this);
-        beaconManager = BeaconManager.getInstanceForApplication(this);
         // To detect proprietary beacons, you must add a line like below corresponding to your beacon
         // type.  Do a web search for "setBeaconLayout" to get the proper expression.
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(Aware.getSetting(this, Settings.TYPE_PLUGIN_BLUETOOTH_BEACON_DETECT)));
-
+        for (BeaconParser b : beaconManager.getBeaconParsers()) {
+            b.setBeaconLayout(Aware.getSetting(this, Settings.TYPE_PLUGIN_BLUETOOTH_BEACON_DETECT));
+        }
         beaconManager.setForegroundScanPeriod(Long.parseLong(Aware.getSetting(this, Settings.FREQUENCY_PLUGIN_BLUETOOTH_BEACON_DETECT)));
         beaconManager.setBackgroundScanPeriod(Long.parseLong(Aware.getSetting(this, Settings.FREQUENCY_PLUGIN_BLUETOOTH_BEACON_DETECT)));
+        try {
+            beaconManager.updateScanPeriods();
+        } catch (RemoteException e) {
+            Log.d(TAG, "update scan period error");
+            e.printStackTrace();
+        }
 
-        beaconManager.bind(this);
+
     }
 
 }

@@ -67,7 +67,7 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
         label = (EditTextPreference) findPreference(LABEL_PLUGIN_BLUETOOTH_BEACON_DETECT);
         if (Aware.getSetting(this, LABEL_PLUGIN_BLUETOOTH_BEACON_DETECT).length() == 0)
             Aware.setSetting(this, LABEL_PLUGIN_BLUETOOTH_BEACON_DETECT, "");
-        frequency.setSummary(Aware.getSetting(this, LABEL_PLUGIN_BLUETOOTH_BEACON_DETECT));
+        label.setSummary(Aware.getSetting(this, LABEL_PLUGIN_BLUETOOTH_BEACON_DETECT));
     }
 
     @Override
@@ -79,7 +79,7 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
         }
 
         if( setting.getKey().equals(FREQUENCY_PLUGIN_BLUETOOTH_BEACON_DETECT) ) {
-            Aware.setSetting(this, key, sharedPreferences.getLong(key, 10000L));
+            Aware.setSetting(this, key, Long.valueOf(sharedPreferences.getString(key, "10000")));
             frequency.setSummary(Aware.getSetting(getApplicationContext(), FREQUENCY_PLUGIN_BLUETOOTH_BEACON_DETECT) + " milliseconds");
         }
 
