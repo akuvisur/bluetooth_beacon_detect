@@ -4,9 +4,36 @@
     android:title="@string/app_name">
 
     <CheckBoxPreference
-        android:key="status_plugin_template"
+        android:key="status_plugin_bluetooth_beacon_detect"
         android:defaultValue="false"
         android:persistent="true"
         android:summary="Activate/deactivate plugin" />
+
+    <EditTextPreference
+        android:defaultValue="10000"
+        android:inputType="numberDecimal"
+        android:key="frequency_plugin_bluetooth_beacon_detect"
+        android:persistent="true"
+        android:summary="Every 10000 milliseconds"
+        android:title="How frequently to scan" />
+
+    <ListPreference
+        android:key="type_plugin_bluetooth_beacon_detect"
+        android:defaultValue="m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"
+        android:persistent="true"
+        android:summary="Beacon type to scan for"
+        android:title="Beacon Type"
+        android:entries="@array/types_readable"
+        android:entryValues="@array/types_values" />
+
+
+    <EditTextPreference
+        android:defaultValue=""
+        android:inputType="textNoSuggestions"
+        android:key="label_plugin_bluetooth_beacon_detect"
+        android:persistent="true"
+        android:summary="Identifier for your entries, e.g when you're in a certain location"
+        android:title="Label" />
+
 
 </PreferenceScreen>

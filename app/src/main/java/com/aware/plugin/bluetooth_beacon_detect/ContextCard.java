@@ -4,52 +4,48 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.aware.Aware;
 import com.aware.utils.IContextCard;
 
 import java.util.Timer;
+import java.util.TimerTask;
 
 public class ContextCard implements IContextCard {
 
     public static final String TAG = "ContextCard";
 
-    TextView dist;
-    TextView addr;
+    TextView name;
+    TextView distance_field;
+    TextView mac_address;
+    TextView num_neacons;
+    TextView update_field;
 
     BroadcastReceiver br;
 
-    Double distance = 99.0;
-    String address = "address";
+    Double b_distance = 99.0;
+    String b_mac_address = "MAC address";
+    String b_name = "name";
+    Integer b_num_beacons = -1;
+
+    Long last_update = System.currentTimeMillis();
+
+    final Handler uiUpdater = new Handler();
 
     //Constructor used to instantiate this card
     public ContextCard() {
         Timer timer = new Timer();
-        /*
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                updateUI();
+                updateTimer();
             }
-        }, 0, 1000); //update the UI every 1 second
-        */
-        br = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals(Plugin.BROADCAST_ACTION)) {
-                    Log.d(TAG, "broadcast received");
-                    if (intent.getDoubleExtra("Distance",99.0) < 1) {
-                        distance = intent.getDoubleExtra(Provider.BluetoothBeacon_Data.DOUBLE_DISTANCE,99.0);
-                        address = intent.getStringExtra(Provider.BluetoothBeacon_Data.MAC_ADDRESS);
-                        updateUI();
-                    }
-                }
-            }
-        };
-
+        }, 0, 1000);
     }
 
     public static boolean receiverRegistered = false;
@@ -61,13 +57,35 @@ public class ContextCard implements IContextCard {
         View card = sInflater.inflate(R.layout.card, null);
 
         //Initialize UI elements from the card
-        dist = (TextView) card.findViewById(R.id.distance);
-        addr = (TextView) card.findViewById(R.id.address);
+        name = (TextView) card.findViewById(R.id.name);
+        distance_field = (TextView) card.findViewById(R.id.distance);
+        mac_address = (TextView) card.findViewById(R.id.mac_address);
+        num_neacons = (TextView) card.findViewById(R.id.num_beacons);
+        update_field = (TextView) card.findViewById(R.id.update_field);
 
+        // if card not initiated yet
         if (!receiverRegistered) {
+            br = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if (intent.getAction().equals(Plugin.BROADCAST_ACTION_NEAREST)) {
+                        Log.d(TAG, "broadcast received");
+                        b_distance = intent.getDoubleExtra(Provider.NearestBeacon_Data.DOUBLE_DISTANCE,99.0);
+                        b_mac_address = intent.getStringExtra(Provider.NearestBeacon_Data.MAC_ADDRESS);
+                        b_name = intent.getStringExtra(Provider.NearestBeacon_Data.NAME);
+                        b_num_beacons = intent.getIntExtra(Provider.NearestBeacon_Data.NUM_BEACONS, -1);
+                        updateUI();
+
+                    }
+                }
+            };
             IntentFilter i = new IntentFilter();
-            i.addAction(Plugin.BROADCAST_ACTION);
+            i.addAction(Plugin.BROADCAST_ACTION_NEAREST);
             context.registerReceiver(br, i);
+
+            // require current context
+            context.sendBroadcast(new Intent(Aware.ACTION_AWARE_CURRENT_CONTEXT));
+
         }
         //Return the card to AWARE/apps
         return card;
@@ -75,7 +93,20 @@ public class ContextCard implements IContextCard {
 
     private void updateUI() {
         Log.d(TAG, "update ui");
-        dist.setText(distance.toString().substring(0,3) + " meters");
-        addr.setText(address);
+        distance_field.setText(b_distance.toString().substring(0,3) + " meters");
+        mac_address.setText("MAC: " + b_mac_address);
+        name.setText(b_name);
+        num_neacons.setText("Total of " + b_num_beacons + " nearby beacons");
+        last_update = System.currentTimeMillis();
+    }
+
+    private void updateTimer() {
+        uiUpdater.post(new Runnable() {
+            @Override
+            public void run() {
+                update_field.setText("Last update: " + (System.currentTimeMillis()-last_update)/1000 + " seconds ago");
+            }
+        });
+
     }
 }

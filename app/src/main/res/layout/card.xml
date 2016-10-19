@@ -8,14 +8,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="address"
-        android:id="@+id/address"
+        android:text="# of beacons"
+        android:id="@+id/num_beacons"
         android:textColor="#000000"
         android:layout_gravity="end"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
         android:paddingStart="8dp"
-        android:paddingEnd="4dp"/>
+        android:paddingEnd="4dp"
+        android:layout_below="@+id/mac_address"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -28,5 +28,41 @@
         android:layout_alignParentEnd="true"
         android:paddingStart="4dp"
         android:paddingEnd="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Beacon name"
+        android:textColor="#000000"
+        android:id="@+id/name"
+        android:paddingStart="8dp"
+        android:paddingEnd="4dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="mac_address"
+        android:textColor="#222222"
+        android:paddingStart="8dp"
+        android:paddingEnd="4dp"
+        android:id="@+id/mac_address"
+        android:layout_below="@+id/name"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Last update: "
+        android:textColor="#333333"
+        android:paddingStart="8dp"
+        android:paddingEnd="4dp"
+        android:id="@+id/update_field"
+        android:layout_below="@+id/num_beacons"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

@@ -74,7 +74,7 @@ bintray {
 }
 
 dependencies {
-    compile 'com.awareframework:aware-core:4.0.641'
-    compile 'org.altbeacon:android-beacon-library:2.9.1'
-    compile 'com.android.support:appcompat-v7:24.0.1'
+    compile "com.awareframework:aware-core:${aware_libs}@aar"
+    compile "com.android.support:appcompat-v7:${support_libs}"
+    compile "org.altbeacon:android-beacon-library:2.9.1"
 }
