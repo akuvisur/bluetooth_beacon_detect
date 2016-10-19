@@ -20,8 +20,10 @@ Both share similar structure and contain the following information:
 
 # Broadcasts
 The plugin sends two types of broadcasts whenever new scan is finished:
-* ACTION_AWARE_PLUGIN_BT_BEACON_ALL = "com.aware.plugin.bluetooth_beacon_detect" - contains information of all scanned beacons, one broadcast is sent for each found beacon
-* ACTION_AWARE_PLUGIN_BT_BEACON_NEAREST = "com.aware.plugin.bluetooth_beacon_detect.nearest_beacon" - contains information for the nearest beacon in each scan
+* ACTION_AWARE_PLUGIN_BT_BEACON_ALL = "com.aware.plugin.bluetooth_beacon_detect" 
+  - contains information of all scanned beacons, one broadcast is sent for each found beacon
+* ACTION_AWARE_PLUGIN_BT_BEACON_NEAREST = "com.aware.plugin.bluetooth_beacon_detect.nearest_beacon" 
+  - contains information for the nearest beacon in each scan
 
 Additionally, the last nearest beacon can be requested from the plugin by *sending* a broadcast with ACTION set as BLUETOOTH_BEACON_EMIT_CONTEXT_REQUEST = "BLUETOOTH_BEACON_EMIT_CONTEXT_REQUEST".
 
