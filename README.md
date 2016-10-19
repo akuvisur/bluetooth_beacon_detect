@@ -1,4 +1,4 @@
-# Bluetooth Beacon Detect
+# AWARE Plugin: Bluetooth Beacon Detect
 AWARE Plugin for Bluetooth Beacon Detecting
 Uses Android Beacon Library (altbeacon.github.io/android-beacon-library) to scan for five different types of bluetooth beacons.
 
