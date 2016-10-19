@@ -68,7 +68,7 @@ public class ContextCard implements IContextCard {
             br = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    if (intent.getAction().equals(Plugin.BROADCAST_ACTION_NEAREST)) {
+                    if (intent.getAction().equals(Plugin.ACTION_AWARE_PLUGIN_BT_BEACON_NEAREST)) {
                         Log.d(TAG, "broadcast received");
                         b_distance = intent.getDoubleExtra(Provider.NearestBeacon_Data.DOUBLE_DISTANCE,99.0);
                         b_mac_address = intent.getStringExtra(Provider.NearestBeacon_Data.MAC_ADDRESS);
@@ -80,13 +80,11 @@ public class ContextCard implements IContextCard {
                 }
             };
             IntentFilter i = new IntentFilter();
-            i.addAction(Plugin.BROADCAST_ACTION_NEAREST);
+            i.addAction(Plugin.ACTION_AWARE_PLUGIN_BT_BEACON_NEAREST);
             context.registerReceiver(br, i);
-
-            // require current context
-            context.sendBroadcast(new Intent(Aware.ACTION_AWARE_CURRENT_CONTEXT));
-
         }
+        Log.d(TAG, "requesting new context");
+        context.sendBroadcast(new Intent("BLUETOOTH_BEACON_EMIT_CONTEXT_REQUEST"));
         //Return the card to AWARE/apps
         return card;
     }

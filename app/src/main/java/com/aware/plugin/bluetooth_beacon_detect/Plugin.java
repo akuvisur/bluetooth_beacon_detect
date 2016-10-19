@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.RemoteException;
 import android.support.v4.content.ContextCompat;
@@ -33,7 +34,11 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
     private static BeaconManager beaconManager;
 
     public static final String BLUETOOTH_BEACON_DETECT_PARAM_CHANGE = "BLUETOOTH_BEACON_DETECT_PARAM_CHANGE";
+    public static final String BLUETOOTH_BEACON_EMIT_CONTEXT_REQUEST = "BLUETOOTH_BEACON_EMIT_CONTEXT_REQUEST";
     private static BroadcastReceiver changeReceiver;
+    private static BroadcastReceiver contentEmitter;
+
+    public static ContextProducer sContextProducer;
 
     @Override
     public void onCreate() {
@@ -46,16 +51,45 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
             @Override
             public void onContext() {
                 Log.d(TAG, "onContext broadcast");
-                sendBroadcast(broadcastIntentAll);
-                sendBroadcast(broadcastIntentNearest);
+                Cursor c = getContentResolver().query(Provider.NearestBeacon_Data.CONTENT_URI,
+                        null,null,null,"timestamp DESC LIMIT 1");
+                if (c != null) {
+                    c.moveToFirst();
+                    broadcastIntentNearest = new Intent();
+                    broadcastIntentNearest.setAction(ACTION_AWARE_PLUGIN_BT_BEACON_NEAREST);
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.MAC_ADDRESS, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.MAC_ADDRESS)));
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.NAME, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.NAME)));
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.ID1, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.ID1)));
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.ID2, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.ID2)));
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.ID3, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.ID3)));
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.DOUBLE_DISTANCE, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.DOUBLE_DISTANCE)));
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.NEAR, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.NEAR)));
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.DOUBLE_RSSI, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.DOUBLE_RSSI)));
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.NUM_BEACONS, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.NUM_BEACONS)));
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.LABEL, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.LABEL)));
+                    sendBroadcast(broadcastIntentNearest);
+                    c.close();
+                }
             }
         };
+
+        sContextProducer = CONTEXT_PRODUCER;
 
         //Add permissions you need (Support for Android M). By default, AWARE asks access to the #Manifest.permission.WRITE_EXTERNAL_STORAGE
         REQUIRED_PERMISSIONS.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         REQUIRED_PERMISSIONS.add(Manifest.permission.READ_EXTERNAL_STORAGE);
         REQUIRED_PERMISSIONS.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         REQUIRED_PERMISSIONS.add(Manifest.permission.BLUETOOTH_ADMIN);
+
+        // load default settings
+        if (Aware.getSetting(this, Settings.FREQUENCY_PLUGIN_BLUETOOTH_BEACON_DETECT).length() == 0)
+            Aware.setSetting(this, Settings.FREQUENCY_PLUGIN_BLUETOOTH_BEACON_DETECT, 10000L);
+
+        if (Aware.getSetting(this, Settings.TYPE_PLUGIN_BLUETOOTH_BEACON_DETECT).length() == 0)
+            Aware.setSetting(this, Settings.TYPE_PLUGIN_BLUETOOTH_BEACON_DETECT, Settings.TYPE_IBEACON);
+
+        if (Aware.getSetting(this, Settings.LABEL_PLUGIN_BLUETOOTH_BEACON_DETECT).length() == 0)
+            Aware.setSetting(this, Settings.LABEL_PLUGIN_BLUETOOTH_BEACON_DETECT, "");
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
 
@@ -82,6 +116,36 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
         IntentFilter changeFilter = new IntentFilter();
         changeFilter.addAction(BLUETOOTH_BEACON_DETECT_PARAM_CHANGE);
         registerReceiver(changeReceiver, changeFilter);
+
+        // for delivering context to contextcard
+        contentEmitter = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d(TAG, "emitting context");
+                Cursor c = getContentResolver().query(Provider.NearestBeacon_Data.CONTENT_URI,
+                        null,null,null,"timestamp DESC LIMIT 1");
+                if (c != null) {
+                    c.moveToFirst();
+                    broadcastIntentNearest = new Intent();
+                    broadcastIntentNearest.setAction(ACTION_AWARE_PLUGIN_BT_BEACON_NEAREST);
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.MAC_ADDRESS, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.MAC_ADDRESS)));
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.NAME, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.NAME)));
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.ID1, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.ID1)));
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.ID2, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.ID2)));
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.ID3, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.ID3)));
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.DOUBLE_DISTANCE, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.DOUBLE_DISTANCE)));
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.NEAR, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.NEAR)));
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.DOUBLE_RSSI, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.DOUBLE_RSSI)));
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.NUM_BEACONS, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.NUM_BEACONS)));
+                    broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.LABEL, c.getString(c.getColumnIndex(Provider.NearestBeacon_Data.LABEL)));
+                    sendBroadcast(broadcastIntentNearest);
+                    c.close();
+                }
+            }
+        };
+        IntentFilter emitFilter = new IntentFilter();
+        emitFilter.addAction(BLUETOOTH_BEACON_EMIT_CONTEXT_REQUEST);
+        registerReceiver(contentEmitter, emitFilter);
 
         //Activate plugin -- do this ALWAYS as the last thing (this will restart your own plugin and apply the settings)
         Aware.startPlugin(this, "com.aware.plugin.bluetooth_beacon_detect");
@@ -132,8 +196,8 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
     Intent broadcastIntentAll;
     Intent broadcastIntentNearest;
 
-    public static final String BROADCAST_ACTION_ALL = "com.aware.plugin.bluetooth_beacon_detect";
-    public static final String BROADCAST_ACTION_NEAREST = "com.aware.plugin.bluetooth_beacon_detect.nearest_beacon";
+    public static final String ACTION_AWARE_PLUGIN_BT_BEACON_ALL = "com.aware.plugin.bluetooth_beacon_detect";
+    public static final String ACTION_AWARE_PLUGIN_BT_BEACON_NEAREST = "com.aware.plugin.bluetooth_beacon_detect.nearest_beacon";
 
     public static String DEVICE_ID;
     public static String LABEL;
@@ -157,7 +221,7 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
                             nearest_beacon = b;
                         }
                         broadcastIntentAll = new Intent();
-                        broadcastIntentAll.setAction(BROADCAST_ACTION_ALL);
+                        broadcastIntentAll.setAction(ACTION_AWARE_PLUGIN_BT_BEACON_ALL);
                         broadcastIntentAll.putExtra(Provider.BluetoothBeacon_Data.MAC_ADDRESS, b.getBluetoothAddress());
                         broadcastIntentAll.putExtra(Provider.BluetoothBeacon_Data.NAME, b.getBluetoothName());
                         broadcastIntentAll.putExtra(Provider.BluetoothBeacon_Data.ID1, b.getId1().toString());
@@ -188,7 +252,7 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
                     // store and broadcast nearest beacon information
                     if (nearest_beacon != null) {
                         broadcastIntentNearest = new Intent();
-                        broadcastIntentNearest.setAction(BROADCAST_ACTION_NEAREST);
+                        broadcastIntentNearest.setAction(ACTION_AWARE_PLUGIN_BT_BEACON_NEAREST);
                         broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.MAC_ADDRESS, nearest_beacon.getBluetoothAddress());
                         broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.NAME, nearest_beacon.getBluetoothName());
                         broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.ID1, nearest_beacon.getId1().toString());
