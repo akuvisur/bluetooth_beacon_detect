@@ -196,8 +196,8 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
     Intent broadcastIntentAll;
     Intent broadcastIntentNearest;
 
-    public static final String ACTION_AWARE_PLUGIN_BT_BEACON_ALL = "com.aware.plugin.bluetooth_beacon_detect";
-    public static final String ACTION_AWARE_PLUGIN_BT_BEACON_NEAREST = "com.aware.plugin.bluetooth_beacon_detect.nearest_beacon";
+    public static final String ACTION_AWARE_PLUGIN_BT_BEACON_ALL = "ACTION_AWARE_PLUGIN_BT_BEACON_ALL";
+    public static final String ACTION_AWARE_PLUGIN_BT_BEACON_NEAREST = "ACTION_AWARE_PLUGIN_BT_BEACON_NEAREST";
 
     public static String DEVICE_ID;
     public static String LABEL;
@@ -209,7 +209,7 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
         beaconManager.addRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                Log.d(TAG, "found " + beacons.size() + " beacons.");
+                //Log.d(TAG, "found " + beacons.size() + " beacons.");
 
                 if (beacons.size() > 0) {
                     Double nearest_beacon_distance = 99.0;
@@ -300,7 +300,7 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
         try {
             beaconManager.updateScanPeriods();
         } catch (RemoteException e) {
-            Log.d(TAG, "update scan period error");
+            //Log.d(TAG, "update scan period error");
             e.printStackTrace();
         }
 

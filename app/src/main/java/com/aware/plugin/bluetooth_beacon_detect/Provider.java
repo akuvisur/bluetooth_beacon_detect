@@ -19,6 +19,8 @@ import com.aware.utils.DatabaseHelper;
 
 import java.util.HashMap;
 
+// TODO add a provider for including labels (friednly names) for beacons
+
 public class Provider extends ContentProvider {
 
     public static String AUTHORITY = "com.aware.plugin.bluetooth_beacon_detect.provider.bt_beacons"; //change to package.provider.your_plugin_name

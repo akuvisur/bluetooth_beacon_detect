@@ -16,6 +16,8 @@ import com.aware.utils.IContextCard;
 import java.util.Timer;
 import java.util.TimerTask;
 
+// TODO add button for adding a friendly name
+
 public class ContextCard implements IContextCard {
 
     public static final String TAG = "ContextCard";
@@ -83,14 +85,14 @@ public class ContextCard implements IContextCard {
             i.addAction(Plugin.ACTION_AWARE_PLUGIN_BT_BEACON_NEAREST);
             context.registerReceiver(br, i);
         }
-        Log.d(TAG, "requesting new context");
+        //Log.d(TAG, "requesting new context");
         context.sendBroadcast(new Intent("BLUETOOTH_BEACON_EMIT_CONTEXT_REQUEST"));
         //Return the card to AWARE/apps
         return card;
     }
 
     private void updateUI() {
-        Log.d(TAG, "update ui");
+        //Log.d(TAG, "update ui");
         distance_field.setText(b_distance.toString().substring(0,3) + " meters");
         mac_address.setText("MAC: " + b_mac_address);
         name.setText(b_name);
