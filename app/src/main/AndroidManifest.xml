@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.aware.plugin.bluetooth_beacon_detect">
 
-
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -11,20 +10,30 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name">
         <service
-            android:name="com.aware.plugin.bluetooth_beacon_detect.Plugin"
+            android:name=".Plugin"
             android:exported="true" />
 
         <activity
-            android:name="com.aware.plugin.bluetooth_beacon_detect.Settings"
+            android:name=".Settings"
             android:exported="true" />
 
         <provider
-            android:name="com.aware.plugin.bluetooth_beacon_detect.Provider"
+            android:name=".Provider"
             android:authorities="${applicationId}.provider.bt_beacons"
             android:exported="true"
             android:readPermission="com.aware.READ_CONTEXT_DATA"
             android:writePermission="com.aware.WRITE_CONTEXT_DATA" />
 
+        <activity
+            android:name=".MainActivity"
+
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

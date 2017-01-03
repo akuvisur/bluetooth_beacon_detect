@@ -57,7 +57,7 @@ bintray {
         licenses = ['Apache-2.0']
         websiteUrl = 'https://github.com/akuvisur/bluetooth_beacon_detect' //EDIT ME
         issueTrackerUrl = 'https://github.com/akuvisur/bluetooth_beacon_detect/issues' //EDIT ME
-        labels = ['aar','android','framework','aware']
+        labels = ['aar', 'android', 'framework', 'aware']
         publicDownloadNumbers = true
         vcsUrl = 'https://github.com/akuvisur/bluetooth_beacon_detect.git' //EDIT ME
         desc = "AWARE Plugin: Bluetooth Beacon Detect" //EDIT ME
@@ -76,5 +76,6 @@ bintray {
 dependencies {
     compile "com.awareframework:aware-core:${aware_libs}@aar"
     compile "com.android.support:appcompat-v7:${support_libs}"
-    compile "org.altbeacon:android-beacon-library:2.9.1"
+    compile 'org.altbeacon:android-beacon-library:2.9.2'
+    compile 'com.android.support:design:24.2.1'
 }

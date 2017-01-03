@@ -260,8 +260,6 @@ public class Provider extends ContentProvider {
         ContentValues values = (new_values != null) ? new ContentValues(new_values) : new ContentValues();
         long _id;
 
-        Log.d("PROVIDER", "numbeacons insert" + values.get("num_beacons"));
-
         switch (sUriMatcher.match(uri)) {
 
             //Add each table DIR case
