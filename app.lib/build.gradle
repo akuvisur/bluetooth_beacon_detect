@@ -9,7 +9,6 @@ android {
     buildToolsVersion "24.0.1"
 
     defaultConfig {
-        applicationId "com.aware.plugin.bluetooth_beacon_detect" //EDIT ME
         minSdkVersion 17
         targetSdkVersion 24
         versionCode version_code
@@ -37,10 +36,6 @@ android {
     lintOptions {
         abortOnError false
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
 }
 
 bintray {
@@ -53,7 +48,7 @@ bintray {
 
     pkg {
         repo = 'com.awareframework'
-        name = android.defaultConfig.applicationId
+        name = 'com.aware.plugin.bluetooth_beacon_detect'
         licenses = ['Apache-2.0']
         websiteUrl = 'https://github.com/akuvisur/bluetooth_beacon_detect' //EDIT ME
         issueTrackerUrl = 'https://github.com/akuvisur/bluetooth_beacon_detect/issues' //EDIT ME
