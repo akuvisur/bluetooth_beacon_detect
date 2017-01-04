@@ -73,6 +73,10 @@ bintray {
     }
 }
 
+repositories {
+    maven { url 'https://jitpack.io' } //this allows JIT library generation directly from GitHub source-code
+}
+
 dependencies {
     compile "com.android.support:appcompat-v7:${support_libs}"
     compile 'com.github.denzilferreira:aware-client:development-SNAPSHOT'
