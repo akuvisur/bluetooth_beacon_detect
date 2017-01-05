@@ -26,7 +26,6 @@ public class Provider extends ContentProvider {
     public static String AUTHORITY = "com.aware.plugin.bluetooth_beacon_detect.provider.bt_beacons"; //change to package.provider.your_plugin_name
     public static final int DATABASE_VERSION = 8; //increase this if you make changes to the database structure, i.e., rename columns, etc.
 
-    public static Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
     public static final String DATABASE_NAME = "plugin_bluetooth_beacon_detect.db"; //the database filename, use plugin_xxx for plugins.
 
     //Add here your database table names, as many as you need
@@ -58,7 +57,7 @@ public class Provider extends ContentProvider {
      */
     // all beacons
     public static final class BluetoothBeacon_Data implements AWAREColumns {
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(Provider.CONTENT_URI, DB_TBL_BT_BEACONS);
+        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + DB_TBL_BT_BEACONS);
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.aware.plugin.bluetooth_beacon_detect.bt_beacons"; //modify me
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.aware.plugin.bluetooth_beacon_detect.bt_beacons"; //modify me
 
@@ -78,7 +77,7 @@ public class Provider extends ContentProvider {
 
     // nearest beacon
     public static final class NearestBeacon_Data implements AWAREColumns {
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(Provider.CONTENT_URI, DB_TBL_NEAREST_BEACON);
+        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + DB_TBL_NEAREST_BEACON);
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.aware.plugin.bluetooth_beacon_detect.nearest_beacon"; //modify me
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.aware.plugin.bluetooth_beacon_detect.nearest_beacons"; //modify me
 
