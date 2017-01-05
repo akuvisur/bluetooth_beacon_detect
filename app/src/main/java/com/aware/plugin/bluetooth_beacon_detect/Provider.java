@@ -112,12 +112,27 @@ public class Provider extends ContentProvider {
         BluetoothBeacon_Data.NUM_BEACONS + " integer default -1," +
         BluetoothBeacon_Data.LABEL + " text default ''";
 
+private static final String DB_TBL_NEAREST_FIELDS =
+        BluetoothBeacon_Data._ID + " integer primary key autoincrement," +
+        BluetoothBeacon_Data.TIMESTAMP + " real default 0," +
+        BluetoothBeacon_Data.DEVICE_ID + " text default ''," +
+        BluetoothBeacon_Data.MAC_ADDRESS + " text default ''," +
+        BluetoothBeacon_Data.NAME + " text default ''," +
+        BluetoothBeacon_Data.ID1 + " text default ''," +
+        BluetoothBeacon_Data.ID2 + " text default ''," +
+        BluetoothBeacon_Data.ID3 + " text default ''," +
+        BluetoothBeacon_Data.DOUBLE_DISTANCE + " real default -1," +
+        BluetoothBeacon_Data.NEAR + " boolean default FALSE," +
+        BluetoothBeacon_Data.DOUBLE_RSSI + " real default -1," +
+        BluetoothBeacon_Data.NUM_BEACONS + " integer default -1," +
+        BluetoothBeacon_Data.LABEL + " text default ''";
+
     /**
      * Share the fields with AWARE so we can replicate the table schema on the server
      */
     public static final String[] TABLES_FIELDS = {
             DB_TBL_ALL_FIELDS,
-            DB_TBL_ALL_FIELDS
+            DB_TBL_NEAREST_FIELDS
     };
 
     //Helper variables for ContentProvider - don't change me
@@ -177,19 +192,19 @@ public class Provider extends ContentProvider {
 
         // nearest beacon
         tableTwoHash = new HashMap<>();
-        tableTwoHash.put(BluetoothBeacon_Data._ID, BluetoothBeacon_Data._ID);
-        tableTwoHash.put(BluetoothBeacon_Data.TIMESTAMP, BluetoothBeacon_Data.TIMESTAMP);
-        tableTwoHash.put(BluetoothBeacon_Data.DEVICE_ID, BluetoothBeacon_Data.DEVICE_ID);
-        tableTwoHash.put(BluetoothBeacon_Data.MAC_ADDRESS, BluetoothBeacon_Data.MAC_ADDRESS);
-        tableTwoHash.put(BluetoothBeacon_Data.NAME, BluetoothBeacon_Data.NAME);
-        tableTwoHash.put(BluetoothBeacon_Data.ID1, BluetoothBeacon_Data.ID1);
-        tableTwoHash.put(BluetoothBeacon_Data.ID2, BluetoothBeacon_Data.ID2);
-        tableTwoHash.put(BluetoothBeacon_Data.ID3, BluetoothBeacon_Data.ID3);
-        tableTwoHash.put(BluetoothBeacon_Data.DOUBLE_DISTANCE, BluetoothBeacon_Data.DOUBLE_DISTANCE);
-        tableTwoHash.put(BluetoothBeacon_Data.NEAR, BluetoothBeacon_Data.NEAR);
-        tableTwoHash.put(BluetoothBeacon_Data.DOUBLE_RSSI, BluetoothBeacon_Data.DOUBLE_RSSI);
-        tableTwoHash.put(BluetoothBeacon_Data.NUM_BEACONS, BluetoothBeacon_Data.NUM_BEACONS);
-        tableTwoHash.put(BluetoothBeacon_Data.LABEL, BluetoothBeacon_Data.LABEL);
+        tableTwoHash.put(NearestBeacon_Data._ID, NearestBeacon_Data._ID);
+        tableTwoHash.put(NearestBeacon_Data.TIMESTAMP, NearestBeacon_Data.TIMESTAMP);
+        tableTwoHash.put(NearestBeacon_Data.DEVICE_ID, NearestBeacon_Data.DEVICE_ID);
+        tableTwoHash.put(NearestBeacon_Data.MAC_ADDRESS, NearestBeacon_Data.MAC_ADDRESS);
+        tableTwoHash.put(NearestBeacon_Data.NAME, NearestBeacon_Data.NAME);
+        tableTwoHash.put(NearestBeacon_Data.ID1, NearestBeacon_Data.ID1);
+        tableTwoHash.put(NearestBeacon_Data.ID2, NearestBeacon_Data.ID2);
+        tableTwoHash.put(NearestBeacon_Data.ID3, NearestBeacon_Data.ID3);
+        tableTwoHash.put(NearestBeacon_Data.DOUBLE_DISTANCE, NearestBeacon_Data.DOUBLE_DISTANCE);
+        tableTwoHash.put(NearestBeacon_Data.NEAR, NearestBeacon_Data.NEAR);
+        tableTwoHash.put(NearestBeacon_Data.DOUBLE_RSSI, NearestBeacon_Data.DOUBLE_RSSI);
+        tableTwoHash.put(NearestBeacon_Data.NUM_BEACONS, NearestBeacon_Data.NUM_BEACONS);
+        tableTwoHash.put(NearestBeacon_Data.LABEL, NearestBeacon_Data.LABEL);
         return true;
     }
 
