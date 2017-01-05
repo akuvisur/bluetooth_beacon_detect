@@ -212,7 +212,7 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
         beaconManager.addRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                //Log.d(TAG, "found " + beacons.size() + " beacons.");
+                Log.d(TAG, "found " + beacons.size() + " beacons.");
 
                 if (beacons.size() > 0) {
                     Double nearest_beacon_distance = 99.0;
@@ -256,31 +256,31 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
                     if (nearest_beacon != null) {
                         broadcastIntentNearest = new Intent();
                         broadcastIntentNearest.setAction(ACTION_AWARE_PLUGIN_BT_BEACON_NEAREST);
-                        broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.MAC_ADDRESS, nearest_beacon.getBluetoothAddress());
-                        broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.NAME, nearest_beacon.getBluetoothName());
-                        broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.ID1, nearest_beacon.getId1().toString());
-                        broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.ID2, nearest_beacon.getId2().toString());
-                        broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.ID3, nearest_beacon.getId3().toString());
-                        broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.DOUBLE_DISTANCE, nearest_beacon.getDistance());
-                        broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.NEAR, nearest_beacon.getDistance() < 1);
-                        broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.DOUBLE_RSSI, nearest_beacon.getRssi());
-                        broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.NUM_BEACONS, beacons.size());
-                        broadcastIntentNearest.putExtra(Provider.BluetoothBeacon_Data.LABEL, LABEL);
+                        broadcastIntentNearest.putExtra(Provider.NearestBeacon_Data.MAC_ADDRESS, nearest_beacon.getBluetoothAddress());
+                        broadcastIntentNearest.putExtra(Provider.NearestBeacon_Data.NAME, nearest_beacon.getBluetoothName());
+                        broadcastIntentNearest.putExtra(Provider.NearestBeacon_Data.ID1, nearest_beacon.getId1().toString());
+                        broadcastIntentNearest.putExtra(Provider.NearestBeacon_Data.ID2, nearest_beacon.getId2().toString());
+                        broadcastIntentNearest.putExtra(Provider.NearestBeacon_Data.ID3, nearest_beacon.getId3().toString());
+                        broadcastIntentNearest.putExtra(Provider.NearestBeacon_Data.DOUBLE_DISTANCE, nearest_beacon.getDistance());
+                        broadcastIntentNearest.putExtra(Provider.NearestBeacon_Data.NEAR, nearest_beacon.getDistance() < 1);
+                        broadcastIntentNearest.putExtra(Provider.NearestBeacon_Data.DOUBLE_RSSI, nearest_beacon.getRssi());
+                        broadcastIntentNearest.putExtra(Provider.NearestBeacon_Data.NUM_BEACONS, beacons.size());
+                        broadcastIntentNearest.putExtra(Provider.NearestBeacon_Data.LABEL, LABEL);
                         sendBroadcast(broadcastIntentNearest);
 
                         ContentValues cv = new ContentValues();
-                        cv.put(Provider.BluetoothBeacon_Data.TIMESTAMP, System.currentTimeMillis());
-                        cv.put(Provider.BluetoothBeacon_Data.DEVICE_ID, DEVICE_ID);
-                        cv.put(Provider.BluetoothBeacon_Data.MAC_ADDRESS, nearest_beacon.getBluetoothAddress());
-                        cv.put(Provider.BluetoothBeacon_Data.NAME, nearest_beacon.getBluetoothName());
-                        cv.put(Provider.BluetoothBeacon_Data.ID1, nearest_beacon.getId1().toString());
-                        cv.put(Provider.BluetoothBeacon_Data.ID2, nearest_beacon.getId2().toString());
-                        cv.put(Provider.BluetoothBeacon_Data.ID3, nearest_beacon.getId3().toString());
-                        cv.put(Provider.BluetoothBeacon_Data.DOUBLE_DISTANCE, nearest_beacon.getDistance());
-                        cv.put(Provider.BluetoothBeacon_Data.NEAR, nearest_beacon.getDistance() < 1);
-                        cv.put(Provider.BluetoothBeacon_Data.DOUBLE_RSSI, nearest_beacon.getRssi());
-                        cv.put(Provider.BluetoothBeacon_Data.NUM_BEACONS, beacons.size());
-                        cv.put(Provider.BluetoothBeacon_Data.LABEL, LABEL);
+                        cv.put(Provider.NearestBeacon_Data.TIMESTAMP, System.currentTimeMillis());
+                        cv.put(Provider.NearestBeacon_Data.DEVICE_ID, DEVICE_ID);
+                        cv.put(Provider.NearestBeacon_Data.MAC_ADDRESS, nearest_beacon.getBluetoothAddress());
+                        cv.put(Provider.NearestBeacon_Data.NAME, nearest_beacon.getBluetoothName());
+                        cv.put(Provider.NearestBeacon_Data.ID1, nearest_beacon.getId1().toString());
+                        cv.put(Provider.NearestBeacon_Data.ID2, nearest_beacon.getId2().toString());
+                        cv.put(Provider.NearestBeacon_Data.ID3, nearest_beacon.getId3().toString());
+                        cv.put(Provider.NearestBeacon_Data.DOUBLE_DISTANCE, nearest_beacon.getDistance());
+                        cv.put(Provider.NearestBeacon_Data.NEAR, nearest_beacon.getDistance() < 1);
+                        cv.put(Provider.NearestBeacon_Data.DOUBLE_RSSI, nearest_beacon.getRssi());
+                        cv.put(Provider.NearestBeacon_Data.NUM_BEACONS, beacons.size());
+                        cv.put(Provider.NearestBeacon_Data.LABEL, LABEL);
                         getContentResolver().insert(Provider.NearestBeacon_Data.CONTENT_URI, cv);
                     }
                 }

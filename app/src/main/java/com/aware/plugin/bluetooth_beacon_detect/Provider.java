@@ -112,19 +112,19 @@ public class Provider extends ContentProvider {
         BluetoothBeacon_Data.LABEL + " text default ''";
 
 private static final String DB_TBL_NEAREST_FIELDS =
-        BluetoothBeacon_Data._ID + " integer primary key autoincrement," +
-        BluetoothBeacon_Data.TIMESTAMP + " real default 0," +
-        BluetoothBeacon_Data.DEVICE_ID + " text default ''," +
-        BluetoothBeacon_Data.MAC_ADDRESS + " text default ''," +
-        BluetoothBeacon_Data.NAME + " text default ''," +
-        BluetoothBeacon_Data.ID1 + " text default ''," +
-        BluetoothBeacon_Data.ID2 + " text default ''," +
-        BluetoothBeacon_Data.ID3 + " text default ''," +
-        BluetoothBeacon_Data.DOUBLE_DISTANCE + " real default -1," +
-        BluetoothBeacon_Data.NEAR + " boolean default FALSE," +
-        BluetoothBeacon_Data.DOUBLE_RSSI + " real default -1," +
-        BluetoothBeacon_Data.NUM_BEACONS + " integer default -1," +
-        BluetoothBeacon_Data.LABEL + " text default ''";
+        NearestBeacon_Data._ID + " integer primary key autoincrement," +
+        NearestBeacon_Data.TIMESTAMP + " real default 0," +
+        NearestBeacon_Data.DEVICE_ID + " text default ''," +
+        NearestBeacon_Data.MAC_ADDRESS + " text default ''," +
+        NearestBeacon_Data.NAME + " text default ''," +
+        NearestBeacon_Data.ID1 + " text default ''," +
+        NearestBeacon_Data.ID2 + " text default ''," +
+        NearestBeacon_Data.ID3 + " text default ''," +
+        NearestBeacon_Data.DOUBLE_DISTANCE + " real default -1," +
+        NearestBeacon_Data.NEAR + " boolean default FALSE," +
+        NearestBeacon_Data.DOUBLE_RSSI + " real default -1," +
+        NearestBeacon_Data.NUM_BEACONS + " integer default -1," +
+        NearestBeacon_Data.LABEL + " text default ''";
 
     /**
      * Share the fields with AWARE so we can replicate the table schema on the server
