@@ -105,7 +105,10 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
         //To sync data to the server, you'll need to set this variables from your ContentProvider
         DATABASE_TABLES = Provider.DATABASE_TABLES;
         TABLES_FIELDS = Provider.TABLES_FIELDS;
-        CONTEXT_URIS = new Uri[]{ Provider.BluetoothBeacon_Data.CONTENT_URI }; //this syncs dummy BluetoothBeacon_Data to server
+        CONTEXT_URIS = new Uri[]{ 
+            Provider.BluetoothBeacon_Data.CONTENT_URI ,
+            Provider.NearestBeacon_Data.CONTENT_URI
+        }; //this syncs dummy BluetoothBeacon_Data to server
 
         changeReceiver = new BroadcastReceiver() {
             @Override
