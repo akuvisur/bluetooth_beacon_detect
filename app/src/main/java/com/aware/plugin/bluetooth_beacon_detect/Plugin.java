@@ -100,6 +100,10 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
         beaconManager.setForegroundScanPeriod(Long.valueOf(Aware.getSetting(this, Settings.FREQUENCY_PLUGIN_BLUETOOTH_BEACON_DETECT)));
         beaconManager.setBackgroundScanPeriod(Long.valueOf(Aware.getSetting(this, Settings.FREQUENCY_PLUGIN_BLUETOOTH_BEACON_DETECT)));
 
+        // minimum of 5 seconds between scans
+        beaconManager.setForegroundBetweenScanPeriod(5000l);
+        beaconManager.setBackgroundBetweenScanPeriod(5000l);
+
         beaconManager.setAndroidLScanningDisabled(true);
 
         beaconManager.bind(this);
