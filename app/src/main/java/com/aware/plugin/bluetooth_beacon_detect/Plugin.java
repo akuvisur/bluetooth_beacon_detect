@@ -100,6 +100,8 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
         beaconManager.setForegroundScanPeriod(Long.valueOf(Aware.getSetting(this, Settings.FREQUENCY_PLUGIN_BLUETOOTH_BEACON_DETECT)));
         beaconManager.setBackgroundScanPeriod(Long.valueOf(Aware.getSetting(this, Settings.FREQUENCY_PLUGIN_BLUETOOTH_BEACON_DETECT)));
 
+        beaconManager.setAndroidLScanningDisabled(true);
+
         beaconManager.bind(this);
 
         //To sync data to the server, you'll need to set this variables from your ContentProvider
