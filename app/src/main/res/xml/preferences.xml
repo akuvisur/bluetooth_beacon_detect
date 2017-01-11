@@ -35,5 +35,9 @@
         android:summary="Identifier for your entries, e.g when you're in a certain location"
         android:title="Label" />
 
-
+    <CheckBoxPreference
+        android:key="syncall_plugin_bluetooth_beacon_detect"
+        android:defaultValue="false"
+        android:persistent="true"
+        android:summary="Enable storage of all nearby beacons" />
 </PreferenceScreen>

@@ -29,12 +29,14 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
     public static final String FREQUENCY_PLUGIN_BLUETOOTH_BEACON_DETECT = "frequency_plugin_bluetooth_beacon_detect";
     public static final String TYPE_PLUGIN_BLUETOOTH_BEACON_DETECT = "type_plugin_bluetooth_beacon_detect";
     public static final String LABEL_PLUGIN_BLUETOOTH_BEACON_DETECT = "label_plugin_bluetooth_beacon_detect";
+    public static final String STATUS_STORE_ALL_DETECTED_BEACONS = "status_store_all_detected_beacons";
 
     //Plugin settings UI elements
     private static CheckBoxPreference status;
     private static ListPreference types;
     private static EditTextPreference frequency;
     private static EditTextPreference label;
+    private static CheckBoxPreference syncall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,12 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
         if (Aware.getSetting(this, LABEL_PLUGIN_BLUETOOTH_BEACON_DETECT).length() == 0)
             Aware.setSetting(this, LABEL_PLUGIN_BLUETOOTH_BEACON_DETECT, "");
         label.setSummary(Aware.getSetting(this, LABEL_PLUGIN_BLUETOOTH_BEACON_DETECT));
+
+        syncall = (CheckBoxPreference) findPreference(STATUS_STORE_ALL_DETECTED_BEACONS);
+        if( Aware.getSetting(this, STATUS_STORE_ALL_DETECTED_BEACONS).length() == 0 ) {
+            Aware.setSetting( this, STATUS_STORE_ALL_DETECTED_BEACONS, false ); //by default, the setting is true on install
+        }
+        syncall.setChecked(Aware.getSetting(getApplicationContext(), STATUS_STORE_ALL_DETECTED_BEACONS).equals("true"));
     }
 
     @Override
@@ -99,6 +107,12 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
         } else {
             Aware.stopPlugin(getApplicationContext(), "com.aware.plugin.bluetooth_beacon_detect");
         }
+
+        if( setting.getKey().equals(STATUS_STORE_ALL_DETECTED_BEACONS) ) {
+            Aware.setSetting(this, key, sharedPreferences.getBoolean(key, false));
+            status.setChecked(sharedPreferences.getBoolean(key, false));
+        }
+
         Intent paramChangeIntent = new Intent(Plugin.BLUETOOTH_BEACON_DETECT_PARAM_CHANGE);
         sendBroadcast(paramChangeIntent);
     }

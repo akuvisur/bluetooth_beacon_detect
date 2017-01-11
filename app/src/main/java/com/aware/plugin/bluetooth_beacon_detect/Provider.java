@@ -24,7 +24,7 @@ import java.util.HashMap;
 public class Provider extends ContentProvider {
 
     public static String AUTHORITY = "com.aware.plugin.bluetooth_beacon_detect.provider.bt_beacons"; //change to package.provider.your_plugin_name
-    public static final int DATABASE_VERSION = 8; //increase this if you make changes to the database structure, i.e., rename columns, etc.
+    public static final int DATABASE_VERSION = 9; //increase this if you make changes to the database structure, i.e., rename columns, etc.
 
     public static final String DATABASE_NAME = "plugin_bluetooth_beacon_detect.db"; //the database filename, use plugin_xxx for plugins.
 
