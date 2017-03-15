@@ -101,7 +101,7 @@ configurations.all {
 
 dependencies {
     compile "com.android.support:appcompat-v7:${support_libs}"
-    compile 'com.github.denzilferreira:aware-client:development-SNAPSHOT'
+    compile "com.github.denzilferreira:aware-client:$aware_libs"
     compile 'org.altbeacon:android-beacon-library:2.9.2'
-    compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support:design:25.2.0'
 }
