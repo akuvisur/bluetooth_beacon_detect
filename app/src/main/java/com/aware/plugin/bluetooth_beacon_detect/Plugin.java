@@ -161,27 +161,21 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
         emitFilter.addAction(BLUETOOTH_BEACON_EMIT_CONTEXT_REQUEST);
         registerReceiver(contentEmitter, emitFilter);
 
-        //Activate plugin -- do this ALWAYS as the last thing (this will restart your own plugin and apply the settings)
-        Aware.startPlugin(this, "com.aware.plugin.bluetooth_beacon_detect");
-
     }
 
     //This function gets called every 5 minutes by AWARE to make sure this plugin is still running.
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        boolean permissions_ok = true;
-        for (String p : REQUIRED_PERMISSIONS) {
-            if (ContextCompat.checkSelfPermission(this, p) != PackageManager.PERMISSION_GRANTED) {
-                permissions_ok = false;
-                break;
-            }
-        }
-
-        if (permissions_ok) {
+        if (PERMISSIONS_OK) {
             //Check if the user has toggled the debug messages
             DEBUG = Aware.getSetting(this, Aware_Preferences.DEBUG_FLAG).equals("true");
+
             //Initialize our plugin's settings
             Aware.setSetting(this, Settings.STATUS_PLUGIN_BLUETOOTH_BEACON_DETECT, true);
+
+            //Activate plugin -- do this ALWAYS as the last thing (this will restart your own plugin and apply the settings)
+            Aware.startPlugin(this, "com.aware.plugin.bluetooth_beacon_detect");
+            Aware.startAWARE(this);
 
         } else {
             Intent permissions = new Intent(this, PermissionsHandler.class);
@@ -190,7 +184,7 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
             startActivity(permissions);
         }
 
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     @Override
@@ -200,11 +194,7 @@ public class Plugin extends Aware_Plugin implements BeaconConsumer {
         unregisterReceiver(changeReceiver);
         Aware.setSetting(this, Settings.STATUS_PLUGIN_BLUETOOTH_BEACON_DETECT, false);
 
-        //Stop plugin
-        Aware.stopPlugin(this, "com.aware.plugin.bluetooth_beacon_detect");
-
-        //Stop AWARE
-        Aware.stopAWARE();
+        Aware.stopAWARE(this);
     }
 
     Intent broadcastIntentAll;
